@@ -71,7 +71,7 @@ jobs:
           image: $DOCKER_LOGIN/${CIRCLE_PROJECT_REPONAME}-2022-03-01
           tag: 0.1.<< pipeline.number >>
 
-  deploy-to-heroku:
+  deploy-app:
     parameters:
         environment:
           type: string
@@ -100,7 +100,8 @@ workflows:
             parameters:
               node_version: ["16.14.0", "14.19.0", "17.6.0"]
       - dependency-vulnerability-scan
-      - deploy-to-heroku:
+      - deploy-app:
+         name: deploy-dev
          environment: dev
       - build-docker:
           requires:
@@ -113,7 +114,8 @@ workflows:
           type: approval
           requires: 
             - build-docker
-      - deploy-to-heroku:
+      - deploy-app:
+          name: prod
           environment: prod
           requires:
             - hold-for-approval
@@ -127,6 +129,6 @@ workflows:
             parameters:
               node_version: ["16.14.0", "14.19.0", "17.6.0" ]
       - dependency-vulnerability-scan
-      - deploy-to-heroku:
+      - deploy-app:
           context: workshop_deployment-dev
           environment: dev
