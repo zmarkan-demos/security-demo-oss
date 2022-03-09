@@ -102,8 +102,9 @@ workflows:
       - dependency-vulnerability-scan:
           context: snyk
       - deploy-app:
-         name: deploy-dev
+         name: deploy-app-dev
          environment: dev
+         context: deployment-dev
       - build-docker:
           requires:
             - build-and-test
