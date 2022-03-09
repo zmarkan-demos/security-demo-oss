@@ -125,7 +125,7 @@ workflows:
           name: prod
           environment: prod
           requires:
-            - hold-for-approval
+            - approve-by-delivery-lead
           context: deployment-prod
 
   nightly-build:
