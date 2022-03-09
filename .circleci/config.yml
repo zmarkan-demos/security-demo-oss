@@ -116,16 +116,16 @@ workflows:
           context: infosec
           requires: 
             - build-docker
-      - approve-by-delivery-lead:
+      - approve-by-team-lead:
           type: approval
           context: deployment-prod
           requires:
             - approve-by-infosec
       - deploy-app:
-          name: prod
+          name: deploy-app-prod
           environment: prod
           requires:
-            - approve-by-delivery-lead
+            - approve-by-team-lead
           context: deployment-prod
 
   nightly-build:
