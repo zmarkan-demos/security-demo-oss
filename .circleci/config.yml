@@ -109,6 +109,7 @@ workflows:
           requires:
             - build-and-test
             - dependency-vulnerability-scan
+          context: deployment-dev
           filters:
             branches:
               only: main
