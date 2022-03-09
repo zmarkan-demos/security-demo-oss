@@ -99,7 +99,8 @@ workflows:
           matrix:
             parameters:
               node_version: ["16.14.0", "14.19.0", "17.6.0"]
-      - dependency-vulnerability-scan
+      - dependency-vulnerability-scan:
+          context: snyk
       - deploy-app:
          name: deploy-dev
          environment: dev
@@ -110,16 +111,22 @@ workflows:
           filters:
             branches:
               only: main
-      - hold-for-approval:
+      - approve-by-infosec:
           type: approval
+          context: infosec
           requires: 
             - build-docker
+      - approve-by-delivery-lead:
+          type: approval
+          context: deployment-prod
+          requires:
+            - approve-by-infosec
       - deploy-app:
           name: prod
           environment: prod
           requires:
             - hold-for-approval
-          context: workshop_deployment-dev
+          context: deployment-prod
 
   nightly-build:
     when: << pipeline.parameters.scheduled >>
@@ -128,7 +135,8 @@ workflows:
           matrix:
             parameters:
               node_version: ["16.14.0", "14.19.0", "17.6.0" ]
-      - dependency-vulnerability-scan
+      - dependency-vulnerability-scan:
+          context: snyk
       - deploy-app:
-          context: workshop_deployment-dev
+          context: deployment-dev
           environment: dev
