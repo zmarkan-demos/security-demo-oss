@@ -34,6 +34,7 @@ jobs:
       - node/install-packages
       - snyk/scan:
           fail-on-issues: true
+          severity-threshold: high
 
   deploy-app:
     parameters:
