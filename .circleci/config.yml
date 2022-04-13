@@ -62,7 +62,7 @@ workflows:
       - approve-for-prod:
           type: approval
           requires:
-            - deploy-app
+            - deploy-app-dev
       - deploy-app:
           env: prod
           name: deploy-app-prod
