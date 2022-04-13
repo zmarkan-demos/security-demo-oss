@@ -71,6 +71,7 @@ workflows:
           type: approval
           requires:
             - deploy-app-dev
+          context: inner-team
       - deploy-app:
           env: prod
           name: deploy-app-prod
