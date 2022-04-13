@@ -4,20 +4,10 @@ orbs:
   node: circleci/node@5.0.0
   snyk: snyk/snyk@1.1.2
 
-parameters:
-  scheduled:
-    type: boolean
-    default: false
-
 jobs:
-  build-and-test:
-    parameters:
-      node_version:
-        type: string
-        default: 16.14.0
-    parallelism: 4
+  run-tests:
     docker:
-      - image: cimg/node:<< parameters.node_version >>
+      - image: cimg/node:16.14.0
     steps:
       - checkout
       - node/install-packages
@@ -45,7 +35,6 @@ jobs:
       - snyk/scan:
           fail-on-issues: true
 
-
   deploy-app:
     parameters:
       env:
@@ -72,7 +61,7 @@ workflows:
       - approve-for-prod:
           type: approval
           requires:
-            - deploy-dev
+            - deploy-app
       - deploy-app:
           env: prod
           requires:
