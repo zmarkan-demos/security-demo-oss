@@ -36,6 +36,7 @@ jobs:
           fail-on-issues: true
           severity-threshold: high
 
+  # Just to illustrate flow and access control. Does not actually deploy in this example.
   deploy-app:
     parameters:
       env:
@@ -58,13 +59,19 @@ workflows:
       - deploy-app:
           env: dev
           name: deploy-app-dev
+          context: contributors
           requires:
             - run-tests
             - security-scan
+          filters:
+            branches:
+              only: 
+                - main
       - approve-for-prod:
           type: approval
           requires:
             - deploy-app-dev
+          context: inner-team
       - deploy-app:
           env: prod
           name: deploy-app-prod
