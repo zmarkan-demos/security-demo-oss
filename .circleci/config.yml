@@ -55,6 +55,7 @@ workflows:
       - security-scan
       - deploy-app:
           env: dev
+          name: deploy-app-dev
           requires:
             - run-tests
             - security-scan
@@ -64,5 +65,6 @@ workflows:
             - deploy-app
       - deploy-app:
           env: prod
+          name: deploy-app-prod
           requires:
             - approve-for-prod
