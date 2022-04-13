@@ -52,7 +52,8 @@ workflows:
   build-test-deploy:
     jobs:
       - run-tests
-      - security-scan
+      - security-scan:
+          context: snyk
       - deploy-app:
           env: dev
           name: deploy-app-dev
