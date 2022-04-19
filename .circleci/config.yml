@@ -56,10 +56,10 @@ jobs:
     steps:
       - run: |
           if [[ -z "${MY_SAMPLE_VARIABLE}" ]]; then
-            echo "MY_SAMPLE_VARIABLE is set - job passing"
-            exit 0
+            echo "MY_SAMPLE_VARIABLE is not set - job failing"
+            exit 1
           else
-            echo "MY_SAMPLE_VARIABLE is not set - job will fail!"
+            echo "MY_SAMPLE_VARIABLE is set - job will pass!"
             exit 1
           fi
 
