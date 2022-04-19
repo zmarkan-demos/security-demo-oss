@@ -76,10 +76,6 @@ workflows:
           context: contributors
           requires:
             - run-tests
-          filters:
-            branches:
-              only: 
-                - main
       - approve-for-prod:
           type: approval
           requires:
@@ -100,3 +96,7 @@ workflows:
             - security-scan
             - check-env-var
           context: inner-team
+          filters:
+            branches:
+              only: 
+                - main
