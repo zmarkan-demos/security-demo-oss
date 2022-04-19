@@ -55,14 +55,12 @@ jobs:
       - image: cimg/base:stable
     steps:
       - run: |
-          echo "MY_SAMPLE_VARIABLE"
-          echo $MY_SAMPLE_VARIABLE
           if [[ -z $MY_SAMPLE_VARIABLE ]]; then
             echo "MY_SAMPLE_VARIABLE is not set - job failing"
             exit 1
           else
             echo "MY_SAMPLE_VARIABLE is set - job will pass!"
-            exit 1
+            exit 0
           fi
 
 
