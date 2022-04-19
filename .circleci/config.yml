@@ -50,10 +50,25 @@ jobs:
       - checkout
       - run: echo "Deploy << parameters.env >>!"
 
+  check-env-var:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run: |
+          if [[ -z "${MY_SAMPLE_VARIABLE}" ]]; then
+            echo "MY_SAMPLE_VARIABLE is set - job passing"
+            exit 0
+          else
+            echo "MY_SAMPLE_VARIABLE is not set - job will fail!"
+            exit 1
+          fi
+
+
 workflows:
   build-test-deploy:
     jobs:
       - run-tests
+      - check-env-var
       - security-scan:
           context: snyk
       - deploy-app:
@@ -63,6 +78,7 @@ workflows:
           requires:
             - run-tests
             - security-scan
+            - check-env-var
           filters:
             branches:
               only: 
