@@ -68,7 +68,8 @@ workflows:
   build-test-deploy:
     jobs:
       - run-tests
-      - check-env-var
+      - check-env-var:
+          context: sample-var-ctx
       - security-scan:
           context: snyk
       - deploy-app:
