@@ -70,20 +70,10 @@ workflows:
   build-test-deploy:
     jobs:
       - run-tests
-      - deploy-app:
-          env: dev
-          name: deploy-app-dev
-          context: contributors
-          requires:
-            - run-tests
-          filters:
-            branches:
-              only: 
-                - main
       - approve-for-prod:
           type: approval
           requires:
-            - deploy-app-dev
+            - run-tests
       - check-env-var:
           context: sample-var-ctx
           requires:
@@ -100,3 +90,7 @@ workflows:
             - security-scan
             - check-env-var
           context: inner-team
+          filters:
+            branches:
+              only: 
+                - main
