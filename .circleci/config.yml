@@ -54,14 +54,16 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - run: |
-          if [[ -z $MY_SAMPLE_VARIABLE ]]; then
-            echo "MY_SAMPLE_VARIABLE is not set - job failing"
-            exit 1
-          else
-            echo "MY_SAMPLE_VARIABLE is set - job will pass!"
-            exit 0
-          fi
+      - run: 
+          name: Check if MY_SAMPLE_VARIABLE exists
+          command: |
+            if [[ -z $MY_SAMPLE_VARIABLE ]]; then
+              echo "MY_SAMPLE_VARIABLE is not set - job failing"
+              exit 1
+            else
+              echo "MY_SAMPLE_VARIABLE is set - job will pass!"
+              exit 0
+            fi
 
 
 workflows:
