@@ -70,18 +70,12 @@ workflows:
   build-test-deploy:
     jobs:
       - run-tests
-      - check-env-var:
-          context: sample-var-ctx
-      - security-scan:
-          context: snyk
       - deploy-app:
           env: dev
           name: deploy-app-dev
           context: contributors
           requires:
             - run-tests
-            - security-scan
-            - check-env-var
           filters:
             branches:
               only: 
@@ -90,9 +84,19 @@ workflows:
           type: approval
           requires:
             - deploy-app-dev
+      - check-env-var:
+          context: sample-var-ctx
+          requires:
+            - approve-for-prod
+      - security-scan:
+          context: snyk
+          requires:
+            - approve-for-prod
       - deploy-app:
           env: prod
           name: deploy-app-prod
           requires:
             - approve-for-prod
+            - security-scan
+            - check-env-var
           context: inner-team
