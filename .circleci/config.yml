@@ -70,8 +70,6 @@ workflows:
   build-test-deploy:
     jobs:
       - run-tests
-      - check-env-var:
-          context: sample-var-ctx
       - security-scan:
           context: snyk
       - deploy-app:
@@ -90,6 +88,8 @@ workflows:
           type: approval
           requires:
             - deploy-app-dev
+      - check-env-var:
+          context: sample-var-ctx
       - deploy-app:
           env: prod
           name: deploy-app-prod
