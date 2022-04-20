@@ -5,7 +5,7 @@ orbs:
   snyk: snyk/snyk@1.1.2
 
 jobs:
-  run-tests:
+  test:
     docker:
       - image: cimg/node:16.14.0
     steps:
@@ -40,10 +40,8 @@ jobs:
   deploy-app:
     parameters:
       env:
-        type:
-          string
-        default:
-          dev
+        type: string
+        default: dev
     docker:
       - image: cimg/base:stable
     steps:
@@ -54,7 +52,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - run: 
+      - run:
           name: Check if MY_SAMPLE_VARIABLE exists
           command: |
             if [[ -z $MY_SAMPLE_VARIABLE ]]; then
@@ -65,38 +63,31 @@ jobs:
               exit 0
             fi
 
-
 workflows:
   build-test-deploy:
     jobs:
-      - run-tests
+      - test
+      - security-scan:
+          context: security
       - deploy-app:
-          env: dev
           name: deploy-app-dev
-          context: contributors
+          env: dev
+          context: deployment-dev
           requires:
-            - run-tests
+            - test
+            - security-scan
           filters:
             branches:
-              only: 
+              only:
                 - main
       - approve-for-prod:
+          name: Approve by delivery manager
           type: approval
           requires:
             - deploy-app-dev
-      - check-env-var:
-          context: sample-var-ctx
-          requires:
-            - approve-for-prod
-      - security-scan:
-          context: snyk
-          requires:
-            - approve-for-prod
       - deploy-app:
-          env: prod
           name: deploy-app-prod
+          env: prod
           requires:
             - approve-for-prod
-            - security-scan
-            - check-env-var
-          context: inner-team
+          context: release-prod
