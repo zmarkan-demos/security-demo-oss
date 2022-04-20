@@ -81,7 +81,6 @@ workflows:
               only:
                 - main
       - approve-for-prod:
-          name: Approve by delivery manager
           type: approval
           requires:
             - deploy-app-dev
